@@ -1,11 +1,13 @@
 import { ApolloServer } from '@apollo/server';
 import Users from './users';
+import Login from './login';
 
 const createGraphqlServer = async () => {
     // create graphql server
     const gqlServer = new ApolloServer({
         typeDefs: `
             ${Users.typeDefs.types}
+            ${Login.typeDefs.types}
             type Todo {
                 id: ID!
                 name: String
@@ -17,6 +19,7 @@ const createGraphqlServer = async () => {
             }
             type Mutation {
                 ${Users.typeDefs.mutation}
+                ${Login.typeDefs.mutation}
             }
             `,
         resolvers: {
@@ -26,6 +29,7 @@ const createGraphqlServer = async () => {
             },
             Mutation: {
                 ...(Users.resolvers.mutation),
+                ...(Login.resolvers.mutation),
             }
         },
     });
