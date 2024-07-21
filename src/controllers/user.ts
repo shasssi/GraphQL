@@ -17,38 +17,54 @@ const generateHashPassword = (password: string) => {
 };
 
 export const createUser = async ({ name, email, password }: { name: string, email: string, password: string }) => {
-    const { salt, hashedPassword } = generateHashPassword(password);
-    const newUser = await prisma.user.create({
-        data: {
-            name,
-            email,
-            password: hashedPassword,
-            salt
-        }
-    });
-    return newUser;
+    try {
+        const { salt, hashedPassword } = generateHashPassword(password);
+        const newUser = await prisma.user.create({
+            data: {
+                name,
+                email,
+                password: hashedPassword,
+                salt
+            }
+        });
+        return newUser;
+    } catch (error) {
+        throwGraphqlError('User not created', 'BAD_USER_INPUT');
+    }
 };
 
 export const getAllUsers = async () => {
-    const allUsers = await prisma.user.findMany();
-    return allUsers || [];
+    try {
+        const allUsers = await prisma.user.findMany();
+        return allUsers || [];
+    } catch (error) {
+        throwGraphqlError('Issue while fetching data', 'INTERNAL_SERVER_ERROR');
+    }
 };
 
 export const getUserById = async ({ id }: { id: string }) => {
-    const user = await prisma.user.findUnique({
-        where: {
-            id: Number(id)
-        }
-    });
-    if (!user) throwGraphqlError('User not found', 'BAD_USER_INPUT');
-    return user;
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: Number(id)
+            }
+        });
+        if (!user) throwGraphqlError('User not found', 'BAD_USER_INPUT');
+        return user;
+    } catch (error) {
+        throwGraphqlError('User not found', 'BAD_USER_INPUT');
+    }
 };
 
 export const deleteUserById = async ({ id }: { id: string }) => {
-    await prisma.user.delete({
-        where: {
-            id: Number(id)
-        }
-    });
-    return 'User deleted successfully';
+    try {
+        await prisma.user.delete({
+            where: {
+                id: Number(id)
+            }
+        });
+        return 'User deleted successfully';
+    } catch (error) {
+        throwGraphqlError('User not found', 'BAD_USER_INPUT');
+    }
 };

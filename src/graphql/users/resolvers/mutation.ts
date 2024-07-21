@@ -6,37 +6,29 @@ import {
     throwGraphqlError
 } from '../../../controllers/user';
 
-export const createNewUser = async (_parent: any, payload: { name: string, email: string, password: string }) => {
-    try {
-        const user = await createUser(payload);
-        return user;
-    } catch (error) {
-        throwGraphqlError('User not created', 'BAD_USER_INPUT');
-    }
+const isUserAuthenticated = (context: any) => {
+    if (!(context && context?.id)) throwGraphqlError('Access denied', 'FORBIDDEN');
 };
 
-export const fetchAllUsers = async () => {
-    try {
-        const users = await getAllUsers();
-        return users;
-    } catch (error) {
-        throwGraphqlError('Issue while fetching data', 'INTERNAL_SERVER_ERROR');
-    }
+export const createNewUser = async (_parent: any, payload: { name: string, email: string, password: string }, context: any) => {
+    isUserAuthenticated(context);
+    const user = await createUser(payload);
+    return user;
 };
 
-export const fetchUserById = async (_parent: any, payload: { id: string }) => {
-    try {
-        const user = await getUserById(payload);
-        return user;
-    } catch (error) {
-        throwGraphqlError('User not found', 'BAD_USER_INPUT');
-    }
+export const fetchAllUsers = async (_p: any, payload: any, context: any) => {
+    isUserAuthenticated(context);
+    const users = await getAllUsers();
+    return users;
 };
 
-export const deleteUser = async (_p: any, payload: { id: string }) => {
-    try {
-        const user = await deleteUserById(payload)
-    } catch (error) {
-        throwGraphqlError('User not found', 'BAD_USER_INPUT');
-    }
+export const fetchUserById = async (_parent: any, payload: { id: string }, context: any) => {
+    isUserAuthenticated(context);
+    const user = await getUserById(payload);
+    return user;
+};
+
+export const deleteUser = async (_p: any, payload: { id: string }, context: any) => {
+    isUserAuthenticated(context);
+    const user = await deleteUserById(payload)
 };
