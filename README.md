@@ -1,7 +1,7 @@
 ##### Typescript
 
 `Typescript - it is build on javascript with type checking features.`
-`Typescript helps to hight the error in editor itself while writing the code which lowers the chance of bugs.`
+`Typescript helps to highlight the error in editor itself while writing the code which lowers the chance of bugs.`
 
 ##### REST
 
