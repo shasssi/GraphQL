@@ -11,7 +11,7 @@ const isUserAuthenticated = (context: any) => {
 };
 
 export const createNewUser = async (_parent: any, payload: { name: string, email: string, password: string }, context: any) => {
-    isUserAuthenticated(context);
+    // isUserAuthenticated(context);
     const user = await createUser(payload);
     return user;
 };
