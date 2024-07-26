@@ -1,6 +1,7 @@
 import { ApolloServer } from '@apollo/server';
 import Users from './users';
 import Login from './login';
+import Customer from './customer';
 
 const createGraphqlServer = async () => {
     // create graphql server
@@ -8,6 +9,7 @@ const createGraphqlServer = async () => {
         typeDefs: `
             ${Users.typeDefs.types}
             ${Login.typeDefs.types}
+            ${Customer.typeDefs.types}
             type Todo {
                 id: ID!
                 name: String
@@ -20,6 +22,7 @@ const createGraphqlServer = async () => {
             type Mutation {
                 ${Users.typeDefs.mutation}
                 ${Login.typeDefs.mutation}
+                ${Customer.typeDefs.mutation}
             }
             `,
         resolvers: {
@@ -30,6 +33,7 @@ const createGraphqlServer = async () => {
             Mutation: {
                 ...(Users.resolvers.mutation),
                 ...(Login.resolvers.mutation),
+                ...(Customer.resolvers.mutation),
             }
         },
     });

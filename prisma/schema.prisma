@@ -14,10 +14,35 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  password String
-  salt String
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  password  String
+  salt      String
   createdAt DateTime @default(now())
+}
+
+model Customer {
+  id        Int        @id @default(autoincrement())
+  firstName String
+  lastName  String
+  age       Int
+  country   String
+  orders    Order[]
+  shipping  Shipping[]
+}
+
+model Order {
+  id         Int       @id @default(autoincrement())
+  item       String
+  amount     Int
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  customerId Int?
+}
+
+model Shipping {
+  id         Int       @id @default(autoincrement())
+  status     String
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  customerId Int?
 }
